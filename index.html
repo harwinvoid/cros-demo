@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <button type="button">点我获取JsonP数据</button>
+  <button type="button">点我获取cros数据</button>
+  <output></output>
+  <script>
+    let output = document.querySelector('output')
+    let [jsonp, cros] = document.querySelectorAll('button')
+
+    function callback(data) {
+      output.innerHTML = JSON.stringify(data)
+    }
+    window.onload = () => {
+      jsonp.addEventListener('click', e => {
+        let script = document.createElement('script')
+        script.src = 'http://localhost:3000/jsonp'
+        document.querySelector('body').appendChild(script)
+      })
+
+      cros.addEventListener('click', e => {
+        let xhr = new XMLHttpRequest()
+        let url = 'http://localhost:3000/cros'
+        xhr.open('GET', url)
+        xhr.send(null)
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            output.innerHTML = xhr.responseText
+          }
+        }
+      })
+    }
+  </script>
+</body>
+
+</html>
